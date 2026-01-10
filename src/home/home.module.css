@@ -1,0 +1,94 @@
+.homeContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header{
+    font-size: 1em;
+    font-family: roboto;
+    font-weight: 400;
+    color: hsl(0, 0%, 100%);
+    margin: 30px;
+}
+
+.newTaskBtn{
+    font-size: 1.5em;
+    color: hsl(0, 0%, 100%);
+    background-color: hsl(23, 83%, 53%);
+    padding: 8px 12px;
+    border-radius: 8px;
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    cursor: pointer;
+}
+
+.taskList{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 400px;
+}
+
+.noTask {
+    font-size: 1em;
+    font-family: roboto;
+    font-weight: 500;
+    font-style: italic;
+    color: hsl(0, 0%, 50%);
+    align-self: center;
+}
+
+.task{
+    display: flex;
+    gap: 8px;
+    font-size: 1em;
+    font-family: roboto;
+    color: white;
+    padding: 8px 0px;
+    border-bottom: 0.5px solid hsl(0, 0%, 55%);
+    width: 100%;
+}
+
+.taskComplete {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 2px solid currentColor;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.taskComplete:checked {
+  background-color: currentColor;
+}
+
+.completed{
+    opacity: 0.6;
+    text-decoration: line-through;
+    transition: opacity 0.3s ease;
+}
+
+.footerSection{
+    display: flex;
+    gap: 8px;
+    font-size: 1em;
+    color: hsl(0, 0%, 100%);
+    font-family: roboto;
+    position: absolute;
+    bottom: 5%;
+    left: 2%;
+}
+
+.footerSection a {
+    font-size: 1em;
+    font-weight: 500;
+    color: hsl(23, 83%, 53%);
+}
+
+@media (min-width: 320px) and (max-width: 480px){
+    .taskList{
+        width: 90%;
+    }
+}
