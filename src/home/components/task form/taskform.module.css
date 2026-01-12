@@ -13,7 +13,7 @@
     justify-content: center;
 }
 
-#taskInput {
+.taskInput {
     padding: 4px 8px;
     font-size: 0.9em;
     font-family: roboto;
@@ -24,7 +24,7 @@
     background-color: hsl(0, 4%, 95%);
 }
 
-#priority{
+.priority{
     font-size: 0.9em;
     padding: 4px 8px;
     color: hsl(0, 0%, 50%);

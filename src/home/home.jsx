@@ -1,6 +1,6 @@
 import styles from './home.module.css';
 import TaskForm from './components/task form/taskform';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Home = () => {
 
@@ -8,7 +8,11 @@ const Home = () => {
     const [showForm, setShowForm] = useState(false);
     const newTask = () => {
         setShowForm(!showForm);
+        setError({});
     }
+
+    // Errors
+    const [error, setError] = useState({});
 
 
     // Function that handles the color of the task based on priority
@@ -20,21 +24,26 @@ const Home = () => {
     }
 
 
-    // Array that stores todos. (kept in a state so rerender can happen when user delete's task)
-    const [todos, setTodos] = useState(() => {
-        return JSON.parse(localStorage.getItem('todos')) || [];
-    });
+    // Array that stores todos.
+    const [todos, setTodos] = useState([]);
+    useEffect(() => {
+        const todos = JSON.parse(localStorage.getItem('todos')) || []
+        setTodos(todos)
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem('todos', JSON.stringify(todos))
+    }, [todos]);
 
 
     // Function that handles task complete
     const taskComplete = (id) => {
-        const taskDiv = document.getElementById(`task-${id}`);
-        if (taskDiv) taskDiv.classList.add(styles.completed);
+        const updatedTodos = todos.map(todo => todo.id === id ? {...todo, completed: true } : todo)
+        setTodos(updatedTodos)
 
         setTimeout(() => {
-            const updatedTodos = todos.filter( todo => todo.id !== id);
-            setTodos(updatedTodos);
-            localStorage.setItem('todos', JSON.stringify(updatedTodos));
+            const completedTodos = todos.filter( todo => todo.id !== id);
+            setTodos(completedTodos);
         }, 500)
     };
 
@@ -46,13 +55,13 @@ const Home = () => {
             <div className={styles.newTaskBtn} onClick={newTask}>{ showForm === false ? <i className='bx bx-plus'></i> : <i className='bx bx-x'></i>}</div>
             <div className={styles.taskList}>
                 {todos.length === 0 ? <p className={styles.noTask} style={{display: showForm === true ? 'none' : 'flex'}}>Click + to add task</p> : todos.map((todo) => (
-                    <div className={styles.task} key={todo.id} style={{color: taskPriority(todo.priority)}} id={`task-${todo.id}`}>
+                    <div className={ todo.completed === true ? `${styles.task} ${styles.completed}`: styles.task } key={todo.id} style={{color: taskPriority(todo.priority)}} id={`task-${todo.id}`}>
                         <input type="radio" className={styles.taskComplete} style={{ color: taskPriority(todo.priority)}} onChange={() => taskComplete(todo.id)}/>
                         <p>{todo.task}</p>
                     </div>
                 ))}
             </div>
-            <TaskForm showForm={showForm} setShowForm={setShowForm} todos={todos} />
+            <TaskForm showForm={showForm} setShowForm={setShowForm} todos={todos} setTodos={setTodos} error={error} setError={setError}/>
             <div className={styles.footerSection}>
                 <p>Created by</p>
                 <a href="">Maro</a>
