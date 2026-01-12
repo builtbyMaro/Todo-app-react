@@ -1,7 +1,24 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './taskform.module.css';
 
 const TaskForm = ({ todos, setTodos, showForm, setShowForm, error, setError}) => {
+
+    // Closes form when escape key is clicked
+    useEffect(() => {
+        const handleEscape = (e) => {
+            if (e.key === "Escape") setShowForm(false)
+        }
+        window.addEventListener("keydown", handleEscape)
+        return () => window.removeEventListener("keydown", handleEscape)
+    }, [setShowForm])
+
+    // Handles focus to input on mount
+    const taskInputRef = useRef(null);
+    useEffect(() => {
+        if(showForm) {
+            taskInputRef.current?.focus()
+        }
+    }, [showForm])
 
 
     // Todo object and input collection handling
@@ -55,11 +72,14 @@ const TaskForm = ({ todos, setTodos, showForm, setShowForm, error, setError}) =>
         }
     }
 
+    if (!showForm) return null;
+
     return(
-        <div className={styles.taskFormContainer} style={{display: showForm === true ? 'flex' : 'none'}}>
+        <div onClick={() => setShowForm(false)} className={styles.backdrop}>
+        <div className={styles.taskFormContainer} onClick={(e) => e.stopPropagation()}>
             <form action="" className={styles.addTaskForm}>
                 <div>
-                    <input type="text" name="task" className={styles.taskInput} placeholder="Enter new task" onChange={handleTodo} value={todo.task} aria-label='Enter task'/>
+                    <input type="text" name="task" className={styles.taskInput} placeholder="Enter new task" onChange={handleTodo} value={todo.task} aria-label='Enter task' ref={taskInputRef}/>
                 </div>
                 <div className={styles.formActions}>
                     <select name="priority" className={styles.priority} onChange={handleTodo} value={todo.priority} aria-label='Select task priority'>
@@ -72,6 +92,7 @@ const TaskForm = ({ todos, setTodos, showForm, setShowForm, error, setError}) =>
                 </div>
             </form>
             { error.task && <p className={styles.errMsg}>{error.task}</p>}
+        </div>
         </div>
     )
 };

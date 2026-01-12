@@ -1,6 +1,6 @@
 import styles from './home.module.css';
 import TaskForm from './components/task form/taskform';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const Home = () => {
 
@@ -21,8 +21,7 @@ const Home = () => {
         if (priority === 'priority2') return '#ffa500';
         if (priority === 'priority3') return '#325aed';
         return '#ffff';
-    }
-
+    } 
 
     // Array that stores todos.
     const [todos, setTodos] = useState([]);
@@ -31,7 +30,13 @@ const Home = () => {
         setTodos(todos)
     }, []);
 
+    const isFirstRender = useRef(true);
     useEffect(() => {
+
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        }
         localStorage.setItem('todos', JSON.stringify(todos))
     }, [todos]);
 
@@ -52,7 +57,9 @@ const Home = () => {
             <div className={styles.header}>
                 <h1>Todo App</h1>
             </div>
-            <div className={styles.newTaskBtn} onClick={newTask}>{ showForm === false ? <i className='bx bx-plus'></i> : <i className='bx bx-x'></i>}</div>
+            <div className={styles.newTaskBtn} onClick={newTask}>
+                <i className='bx bx-plus'></i>
+            </div>
             <div className={styles.taskList}>
                 {todos.length === 0 ? <p className={styles.noTask} style={{display: showForm === true ? 'none' : 'flex'}}>Click + to add task</p> : todos.map((todo) => (
                     <div className={ todo.completed === true ? `${styles.task} ${styles.completed}`: styles.task } key={todo.id} style={{color: taskPriority(todo.priority)}} id={`task-${todo.id}`}>
