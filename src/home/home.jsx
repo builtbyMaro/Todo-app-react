@@ -64,7 +64,7 @@ const Home = () => {
             <TaskForm showForm={showForm} setShowForm={setShowForm} todos={todos} setTodos={setTodos} error={error} setError={setError}/>
             <div className={styles.footerSection}>
                 <p>Created by</p>
-                <a href="">Maro</a>
+                <a href="https://x.com/builtbyMaro_" target='_blank'>Maro</a>
             </div>
         </div>
     )
